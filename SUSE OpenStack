@@ -1,0 +1,76 @@
+WHY SUSE
+Live patching - No Downtime
+High Availability is included with SUSE Linux for SAP
+
+SUSE Storage
+Software defines storage solution which designed on top of CEPH technology.
+ceph runs on commodity hardware, which reduces cost.
+uses RADOS(Reliable Autonomic Distributed Object Store) storage.
+can scale to 1000's of nodes and petabytes of data.
+self-managing:	adds,removes,manages failovers and overload.
+No single point of failure.
+And Open source.
+
+SUSE Open Stack
+Nova		Compute Mgmt
+Swift		Object Storage Mgmt
+Cinder		Block Storage Mgmt
+Manila		Shared File System Service
+Neutron		Networking
+Glance		OS Image Service
+Keystone	Identity Service
+Horizon		Dashboard
+Heat		Orchestration Service
+Celiometer	Telemetry Service
+Trove		Databsae as a Service
+Postgres	Database Used by SUSE
+Rabbit		Message Queue
+
+OpenStack Deployment:
+
+Procedure to setup Admin Server
+-While Installation > network > FQDN, DNS, Routing
+-While installing don't forget to select on Software>SMT
+-After Installation, zypper up and zypper update
+-As your server spins up, assign FQDN and add hostnames in /etc/hosts.
+Check "hostname -f", if displays full hostname ok, if not 
+hostnamectl set-hostname FQDN
+exec bash
+check hostname -f
+-Don't click loop back address, don't forgot to give routing address if you are setting static ip.
+-While setting up SMT, make sure you use the credentials of a single person, such as email, registration code, organisation credentials, because it looks for repositories in that persons profile. Provide SMT Url(not required to change), database passwords, generating cerificate.
+-After configuring SMT, check for mysql status, it should be turned on. apache2 maynot be turned on.
+-Don't turn on apache2 server manually, it will start itself while installing crowbar GUI.
+-You have to run the iso file manually from Add-on products to get the crowbar setup.
+-While setting crowbar, you don't need to set the networking, unless you want it as you need. If you are using two networks, one admin and one public, set network mode as dual. You have to configure bastion network to access the admin server from outside, which is necessary to access crowbar GUI.
+-Setting node from existing server is possible by run crowbar_register script in target servers. Before doing that register your server with SMT of Admin Server.
+
+
+Things Fishing in our deployment:
+- yast crowbar won't show up as they mentioned, until we run the crowbar iso image as add-on product.
+- smt server is not turning on as we do the "smt configuration wizard" step as mentioned in Deployment Guide.
+- we are not deploying the nodes using PXE boot, which is regular method, which didn't work with us couple of times. Instead we are using existing nodes, which is an alternative method.
+- while deploying services, as we are using dual mode, em1 for admin private network and em2 for all other networks. nodes should use em2 for configuring network, instead they are using em3.
+
+
+Services Deployment
+-Update Barclamp on all servers except Admin.
+-Database- MariaDB on control node.
+-RabbitMQ user/virtual default host is nova on port 5672. Deployed on Control Node.
+-Keystone default Admin username-admin, password-crowbar, Regular username-stackadm, password-cevos.
+**failed**zypper not working**can ping internal network & router, but not DNS server(8.8.8.8)**adding routing made it work after couple of minutes debugging, which didn't worked as soon as the error arised(that's issue with network). We thought the network is getting unreachable, when we are trying to deploy a service, but I observed the network was changing by itself without any chnages too(maybe because some service running in the background).
+-
+
+Warnings:
+The components controlling the cloud, including storage management and control components,
+need to be installed on the Control Node(s) (refer to Section 1.2, “The Control Node(s)” for more
+information). However, you may not use your Control Node(s) as a compute node or storage host
+for Swift or Ceph. These components may not be installed on the Control Node(s): swift-storage,
+all Ceph components, and nova-compute-*. These components must be installed on dedicated
+nodes.
+
+When MariaDB is used as the database back end, the monasca-server role cannot be deployed
+to the node with the database-server role. These two roles cannot coexist due to
+the fact that Monasca uses its own MariaDB instance.
+
+Never install the swift-storage service on a node that runs other OpenStack components.
