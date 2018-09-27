@@ -1,0 +1,280 @@
+Suse uses 3.x kernel version where redhat uses 2.6.32.
+
+SUSE comes in different flavours
+-openSUSE Leap (Regular & free)
+-Tumbleweed (rolling release)
+-SUSE Linux Enterprise (Support available)
+	(GeoCluster, High Availability,Software Development, Real Time & Modules) extensions are available.
+
+OpenSuSE is totally free but not the SuSE Enterprise, we have to pay for support & updates.
+
+Subscription Management Tool (SMT) Server is used to download updates from internet and update anytime to all other servers in that bandwidth internally without internet.
+
+Interprocess Communication file
+Sockets		Bi directional
+Pipes/FIFO	Uni dire 
+
+This Uses Gnome Desktop and Uses Nautilius File Manager.
+
+Linux File Structure
+-bin	binaries
+-sbin	system binaries(admin)
+-lib	libraries(32bit)
+-lib64	libraries(64bit)
+-etc	config files(ex:hosts)
+-usr	
+-opt	vendor application installation location
+-root	root directory
+-boot	bootloader(ex:grub2)
+-home	users home folder
+-run	drives attached(ex:media)
+-mnt	mount (to mount disks & drives)
+-srv	services(such as ftp,www)
+-var	variable(ex:log,cache,mail,spool,lock)
+-tmp	temperory files(for application)
+-dev	device(disks such as sda,sdb)
+-sys	system dynamic memory
+-proc	such as mem info file
+
+
+SuSE uses yast/yast2 (Yet Another System Tool) console/graphical.
+And use zypper insted of yum in cli.
+
+To list all modules
+yast -l	or yast --list
+To Enter a module
+yast <module>
+
+Help commands:
+-h
+--help
+Manual Pages:
+man [section] command	man -k keyword
+whatis [command]
+whereis
+info [command]
+
+Alias	shortning the commands
+Defining	alias ALIAS_NAME="COMMAND"
+Removing	unalias ALIAS_NAME
+List All	alias
+File location	~/.alias	in user home.
+
+Shell History
+file location	~/.bash_history
+<string><PgUp>/<string><PgDn>
+history for any string, Ctrl+R
+numbered command !<command-number>
+
+Common Shell Commands
+pwd	path of current working directory
+cd	change directory
+ls	list of files/folders
+ll	detailed list of files/folders
+la	list hidden files/folders
+cp	copy folderpath to destinationpath
+mv	move or rename
+rm	remove files/folders
+rm -rf	remove directory
+mkdir	make directory	-p for recurssive
+ln	to create a link
+touch	modify access time or create a file, if not exist
+
+Shell File Commands
+cat	concatenate files
+tac	reverse order concatenate
+more	displays the content in the file
+less	displays content
+head	displays first line in file or -n for number of lines
+tail	displays last lines of file. -f for last appended details, -n for number of lines
+find	search a file
+
+Shell Backup Commands
+tar	create, expand or list arcive files
+where in xvf/cvf & czvf/cjvf c-create, x-extract, v-verbose, f-filename, z-gzip, j-bzip2.
+cpio	create, expand or list arcive files
+gzip	compress as gzip file
+gunzip	expand files compressed with gzip
+bzip2	compress as bzip2 file
+bunzip2	expand files compressed with bzip2
+rsync	copy only changed directories/files keeping the unchanged one same
+dd	copies block by block (if,of,bs)
+
+
+RegEx symbols
+^	beginning of the line
+$	end of the line
+\<xy>	beginning and end of the word
+.	any single character
+[abc]	one character from the set
++	one or more of preceding expression
+*	any number of preceding single char
+{min,max} preceding expres min ans max value
+|	any one from
+?	zero or more of the preceding
+\	anyone from the specified range
+
+WildCards
+~	user's home directory
+*	Any number or zero values
+?	Any one value
+{..}	list of values
+[..]	Range of values [1-9] or [a-z]
+[!xyz]	None of those characters
++	zero or more
+
+Escape Characters
+\	interpret next char as ASCII
+".."	interpret all as ASCII except $,\
+'..'	interpret all as ASCII
+
+Varaiables
+echo	Displays value of var
+set	Displays all shell var and func
+env	Displays only environment var
+Special Variables
+use them with echo
+$?	return value of previously executed command
+$0	name of the command being executed
+$#	num of command arguments
+$*	all command arguments
+$$	process Id of the current shell
+
+Channel Redirection
+>	redirect stdout into a file
+>>	redirect stdout and append into a file
+2>	redirect stderr inta a file
+2>>	redirect stderr and append into a file
+|	uses stdout of one as stdin to another
+tee	redirects stdout to a file and displays on terminal
+
+Chaining Commands
+;	chain multiple commands
+&&	stops chain if one command fails
+||	executes second command only if first is wrong
+
+
+VIM Commands
+i	insert
+a	append- go to end of line cursor at
+o	open new line below cursor line
+O	open new line above cursor line
+Navigation
+k	up arrow
+j	down arrow
+h	left arrow
+l	right arrow
+IN command mode
+x	delete character	7x will delete 7 characters
+dd	delete line		7dd will delete 7 lines
+yy	copies line
+p	pastes line below cursor line
+P	pastes line before cursor line
+Other Commands
+u	undo last operation
+Cltr+r	undo last undo operation
+:/xxx	search down the file
+:?xxx	search up the file
+n/N	next search result
+:w/ZZ	save the file
+:q/:q!	quit/quit without saving
+:w <file>	save as file name <file>
+:o <file>	open a file named <file>
+:vnew	new window vertically
+:new	new window horizontally
+:help	help on VIM
+
+
+SSH Commands
+connects to default port 22
+client recieves and stores key in ~/.ssh/known_hosts
+uses Diffie-Hellman key exchange and Symmetric encryption 
+ssh user@ip	ssh user@hostname
+scp target_path user@ip destination_path
+sftp target_path user@ip destination_path
+
+Configuration File: /etc/ssh/sshd_config
+AllowUsers	listing ssh users
+DenyUsers	Deny users listed here
+ListenAddress	Internal communication address
+Port		22
+PasswordAuth	enable or disable
+UsePAM		pluggable Auth Module
+
+Creating Key
+ssh-keygen -t dsa	-t is for key type, dsa is one of type.
+scp ~/.ssh/id_dsa.pub user@ip:pubkey
+ssh user@ip	enter password
+cat pubkey >> ~/.ssh/authorized_keys
+exit
+ssh user@ip	prompts for passphrase
+OR
+ssh-copy-id -i /home/user/.ssh/id_dsa.pub \ user@ip
+ssh-keyscan	reads ssh host key from remote system
+
+VNC(virtual network computing)
+config file /etc/xinetd.d/vnc
+TCP 5901 port
+http/web 5801 port
+client can be Windows or Linux.
+Xvnc --help	for details
+enables graphical desktop
+server-client model
+Remote Management with Session Management
+Remote Management without Session Management
+
+Process Priority
+User & Daemon	types
+ps aux		list all user processes 
+ps -ef		list all full-format with CLI
+pstree -p<pid>	lists all parent & child processes
+top		displays all processes, their cpu,ram.. usage.
+kill <pid> [signal]	kill the process
+killall <process name>	kills all process with that name.
+nice x <processname>	process priority, where x can be 19(least) to -20(high)
+renice x -p <pid>	change the process priority
+
+Jobs & Processes
+ctrl+z		pauses task in background
+bg		continues the task in the background
+<process> &	starts job in the background
+jobs		to list jobs running
+fg/fg <job_id>	bring background task into foreground
+screen		to open a psuedo tty screen
+crontab		command to manipulate user crontabs
+	-e	edit a crontab
+	-l	list users crontab
+	-r	remove crontab
+0 0 * * * /home/script.sh	This will run that script every day 0th hr,min. The order is min hour day month dayofweek /path_of_script
+at Daemon	non-recurring jobs
+at		schedule a task, ctrl+d to exit
+atq		list scheduled tasks
+atrm <job_id>	remove job with that id
+/etc/at.allow	list users who can define jobs
+/etc/at/deny	list users who can't define jobs
+
+xinetd- extended internet daemon
+ftp,tftp,rsync,.. any service connects to xinetd and then to ports, it acts as super server, something like middle man.
+systemctl enable xinetd
+rcxinetd start/stop/status/reload
+service xinetd start/stop/status/reload
+systemctl start/stop/status/reload xinetd
+-yast2 inetd	to configure xinetd
+or
+-select YaST, ControlCenter > NetworkServices > NetworkServices(xinted)
+-Now enable the service.
+-select deamon you need to use, then toogle status.
+/etc/xinetd.conf	config file for xinetd
+/etc/xinetd.d		directory for individual xinetd daemon
+
+Manage Users & Groups
+UID	root(0), system(1-99), system accounts(100-499), unprivileged accounts(>=1000)
+whoami		displays current user
+id username	displays uid,gid of username
+groups username	display which group user is in
+finger username	displays name, login_id, home_directory, last_login, mails & plans.
+/etc/passwd	/etc/shadow	/etc/group
+User_Alias <name> = <user1>[,<user2>,..]
+Cmnd_Alias <name> = <cmd1>[,<cmd2>,..]
+Host_Alias <name> = <host1>[,<host2>,..]
+Runas_Alias <name> = <user1>[,<user2>,..]
